@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { GroceriesServiceProvider } from '../../providers/groceries-service/groceries-service';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-import { ItemSliding } from 'ionic-angular';
+import { GroceriesServiceProvider } from '../../providers/groceries-service/groceries-service';
+import { InputDialogueServiceProvider } from '../../providers/input-dialogue-service/input-dialogue-service';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { ItemSliding } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -14,13 +15,26 @@ export class HomePage {
 
   title = "Grocery List";
 
+  items = []
+  errorMessage: string;
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public dataService: GroceriesServiceProvider, public alertCtrl: AlertController, public socialSharing: SocialSharing) {
 
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public dataService: GroceriesServiceProvider, public alertCtrl: AlertController, public socialSharing: SocialSharing, public inputDialogService: InputDialogueServiceProvider) {
+    dataService.dataChanged$.subscribe((dataChanged: boolean) => {
+      this.loadItems();
+    });
+  }
+
+  ionViewDidLoad(){
+    this.loadItems();
   }
 
   loadItems(){
-    return this.dataService.getItems();
+    this.dataService.getItems()
+      .subscribe(
+        items => this.items = items,
+        error => this.errorMessage = <any>error);
+      
   }
 
   removeItem(item, index){
@@ -68,7 +82,7 @@ export class HomePage {
 
   addItem(){
     console.log("Adding new item")
-    this.showAddItemPrompt();
+    this.inputDialogService.showPrompt();
 
   }
 
