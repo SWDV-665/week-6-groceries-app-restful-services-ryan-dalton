@@ -6,10 +6,10 @@ webpackJsonp([0],{
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GroceriesServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(254);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(257);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs__ = __webpack_require__(410);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs__);
@@ -69,9 +69,9 @@ var GroceriesServiceProvider = /** @class */ (function () {
             _this.dataChangeSubject.next(true);
         });
     };
-    GroceriesServiceProvider.prototype.shareItem = function (index) {
-        this.items.splice(index, 1);
-    };
+    //shareItem(index){
+    // this.items.splice(index, 1);
+    // }
     GroceriesServiceProvider.prototype.addItem = function (item) {
         var _this = this;
         this.http.post(this.baseURL + "/api/groceries", item).subscribe(function (res) {
@@ -81,8 +81,8 @@ var GroceriesServiceProvider = /** @class */ (function () {
     };
     GroceriesServiceProvider.prototype.editItem = function (item, index) {
         var _this = this;
-        console.log("Editing item = ", item);
-        this.http.put(this.baseURL + "api/groceries/" + item._id, item).subscribe(function (res) {
+        console.log("Edited item = ", index, item);
+        this.http.put(this.baseURL + "/api/groceries/" + item._id, item).subscribe(function (res) {
             _this.items = res;
             _this.dataChangeSubject.next(true);
         });
@@ -178,7 +178,7 @@ var TabsPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AboutPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -213,7 +213,7 @@ var AboutPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContactPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -248,10 +248,10 @@ var ContactPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_groceries_service_groceries_service__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_input_dialogue_service_input_dialogue_service__ = __webpack_require__(348);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_social_sharing__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_social_sharing__ = __webpack_require__(349);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -288,17 +288,16 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.loadItems = function () {
         var _this = this;
-        this.dataService.getItems()
-            .subscribe(function (items) { return _this.items = items; }, function (error) { return _this.errorMessage = error; });
+        this.dataService.getItems().subscribe(function (items) { return _this.items = items; }, function (error) { return _this.errorMessage = error; });
     };
-    HomePage.prototype.removeItem = function (item, index) {
-        console.log("Removing Item: ", item, index);
+    HomePage.prototype.removeItem = function (item, id) {
+        console.log("Removing Item: ", item.name);
         var toast = this.toastCtrl.create({
             message: 'Removing Item - ' + item.name,
             duration: 3000
         });
         toast.present();
-        this.dataService.removeItem(index);
+        this.dataService.removeItem(id);
     };
     HomePage.prototype.shareItem = function (item, index) {
         console.log("Sharing Item: ", item, index);
@@ -319,115 +318,35 @@ var HomePage = /** @class */ (function () {
         });
     };
     HomePage.prototype.editItem = function (item, index) {
-        console.log("Edit Item: ", item, index);
         var toast = this.toastCtrl.create({
             message: 'Editing Item - ' + item.name,
             duration: 3000
         });
         toast.present();
         console.log("Editing item: ", item);
-        this.showEditItemPrompt(item, index);
+        this.inputDialogService.showPrompt(item, index);
     };
     HomePage.prototype.addItem = function () {
         console.log("Adding new item");
         this.inputDialogService.showPrompt();
     };
-    HomePage.prototype.showAddItemPrompt = function () {
-        var _this = this;
-        var prompt = this.alertCtrl.create({
-            title: 'Add Item',
-            message: "Enter the name and quantity of the item you're adding",
-            inputs: [
-                {
-                    name: 'name',
-                    placeholder: 'Name'
-                },
-                {
-                    name: 'quantity',
-                    placeholder: 'Quantity'
-                },
-                {
-                    name: 'blurb',
-                    placeholder: 'Notes etc. (optional)'
-                },
-            ],
-            buttons: [
-                {
-                    text: 'Cancel',
-                    handler: function (data) {
-                        console.log('Cancelled add item');
-                    }
-                },
-                {
-                    text: 'Add',
-                    handler: function (item) {
-                        console.log('Add clicked for', item);
-                        item.image = 'assets/imgs/customitem.jpg';
-                        _this.dataService.addItem(item);
-                    }
-                }
-            ]
-        });
-        prompt.present();
-    };
-    HomePage.prototype.showEditItemPrompt = function (item, index) {
-        var _this = this;
-        //save previousImage as the item's image (moved over after inputs take place)
-        var previousImage = item.image;
-        var prompt = this.alertCtrl.create({
-            title: 'Edit Item',
-            message: "Enter edit name and quantity of the item",
-            inputs: [
-                {
-                    name: 'name',
-                    value: item.name
-                },
-                {
-                    name: 'quantity',
-                    placeholder: 'Quantity',
-                    value: item.quantity
-                },
-                {
-                    name: 'blurb',
-                    placeholder: 'Notes etc. (optional)',
-                    value: item.blurb
-                },
-            ],
-            buttons: [
-                {
-                    text: 'Cancel',
-                    handler: function (data) {
-                        console.log('Cancelled add item');
-                    }
-                },
-                {
-                    text: 'Save',
-                    handler: function (item) {
-                        //add a line here so that our image doesn't change when we edit an item 
-                        item.image = previousImage;
-                        console.log('Save clicked for', item);
-                        _this.dataService.editItem(item, index);
-                    }
-                }
-            ]
-        });
-        prompt.present();
-    };
-    HomePage.prototype.markDone = function (item) {
+    HomePage.prototype.markDone = function (item, index) {
         console.log('Marked bought for', item.name);
-        item.image = 'assets/imgs/checkbox.jpg';
+        //item.image= 'assets/imgs/checkbox.jpg'
         var toast = this.toastCtrl.create({
             message: 'Marked complete - ' + item.name,
             duration: 3000
         });
         toast.present();
+        item.blurb = "Purchased!";
+        this.dataService.editItem(item, index);
     };
     HomePage.prototype.collapse = function (slidingItem) {
         slidingItem.close();
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"C:\Users\dalto_000\Documents\GitHub\SWDV665\week-6-groceries-app-restful-services-ryan-dalton\src\pages\home\home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>{{title}}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <h4 text-center *ngIf="loadItems().length === 0">\n    No items available on the list! Click to add some...\n  </h4>\n\n  <h2>My Grocery / Survival List</h2>\n  <ion-list>\n    <ion-list-header>\n      Items\n    </ion-list-header>\n  \n    <ion-item-sliding *ngFor="let item of loadItems(); let i = index" #slidingItem>\n      <ion-item>\n        <ion-avatar item-start>\n          <img src=\'../../assets/imgs/customitem.jpg\'>\n        </ion-avatar>\n        <h2>{{item.name}}</h2>\n        <h3>Quantity: {{item.quantity}} ct.</h3>\n        <p>{{item.blurb}}</p>\n      </ion-item>\n      <ion-item-options>\n        <button (click)="editItem(item, i)" ion-button color="light" icon-start>\n          <ion-icon name="create"></ion-icon>\n          Edit\n        </button>\n        \n        <button (click)="shareItem(item, i)" ion-button color="primary" icon-start>\n          <ion-icon name="share-alt"></ion-icon>\n          Share\n        </button>\n\n        <button (click)="removeItem(item, i)" ion-button color="danger" icon-start>\n          <ion-icon name="trash"></ion-icon>\n          Delete\n        </button>\n        <button (click)="markDone(item); collapse(slidingItem)" ion-button color="secondary" icon-start>\n          <ion-icon name="checkbox"></ion-icon>\n          Done\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n\n  \n  </ion-list>\n  <ion-fab bottom right>\n      <button (click)="addItem()" ion-fab mini><ion-icon name="add"></ion-icon></button>\n  </ion-fab>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\dalto_000\Documents\GitHub\SWDV665\week-6-groceries-app-restful-services-ryan-dalton\src\pages\home\home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"C:\Users\dalto_000\Documents\GitHub\SWDV665\week-6-groceries-app-restful-services-ryan-dalton\src\pages\home\home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>{{title}}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <h4 text-center *ngIf="items.length === 0">\n    No items available on the list! Click to add some...\n  </h4> \n\n  <h2>My Grocery / Survival List</h2>\n  <ion-list>\n    <ion-list-header>\n      Items\n    </ion-list-header>\n  \n    <ion-item-sliding *ngFor="let item of items; let i = index" #slidingItem>\n      <ion-item>\n        <ion-avatar item-start>\n          <img src=\'../../assets/imgs/customitem.jpg\'>\n        </ion-avatar>\n        <h2>{{item.name}}</h2>\n        <h3>Quantity: {{item.quantity}} ct.</h3>\n        <p>{{item.blurb}}</p>\n      </ion-item>\n      <ion-item-options>\n        <button (click)="editItem(item, i)" ion-button color="light" icon-start>\n          <ion-icon name="create"></ion-icon>\n          Edit\n        </button>\n        \n        <button (click)="shareItem(item, i)" ion-button color="primary" icon-start>\n          <ion-icon name="share-alt"></ion-icon>\n          Share\n        </button>\n\n        <button (click)="removeItem(item, item._id)" ion-button color="danger" icon-start>\n          <ion-icon name="trash"></ion-icon>\n          Delete\n        </button>\n        <button (click)="markDone(item, index); collapse(slidingItem)" ion-button color="secondary" icon-start>\n          <ion-icon name="checkbox"></ion-icon>\n          Done\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n\n  \n  </ion-list>\n  <ion-fab bottom right>\n      <button (click)="addItem()" ion-fab mini><ion-icon name="add"></ion-icon></button>\n  </ion-fab>\n\n</ion-content>\n'/*ion-inline-end:"C:\Users\dalto_000\Documents\GitHub\SWDV665\week-6-groceries-app-restful-services-ryan-dalton\src\pages\home\home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* ToastController */], __WEBPACK_IMPORTED_MODULE_2__providers_groceries_service_groceries_service__["a" /* GroceriesServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_social_sharing__["a" /* SocialSharing */], __WEBPACK_IMPORTED_MODULE_3__providers_input_dialogue_service_input_dialogue_service__["a" /* InputDialogueServiceProvider */]])
     ], HomePage);
@@ -444,7 +363,7 @@ var HomePage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InputDialogueServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_groceries_service_groceries_service__ = __webpack_require__(136);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -474,7 +393,7 @@ var InputDialogueServiceProvider = /** @class */ (function () {
         var _this = this;
         var prompt = this.alertCtrl.create({
             title: item ? 'Edit Item' : 'Add Item',
-            message: item ? "Please edit item..." : "Please enter item...",
+            message: item ? "Please edit item..." : "Please enter a new item...",
             inputs: [
                 {
                     name: 'name',
@@ -489,7 +408,7 @@ var InputDialogueServiceProvider = /** @class */ (function () {
                 {
                     name: 'blurb',
                     placeholder: 'Add description here',
-                    value: item ? item.name : null
+                    value: item ? item.blurb : null
                 },
             ],
             buttons: [
@@ -506,6 +425,7 @@ var InputDialogueServiceProvider = /** @class */ (function () {
                         if (index !== undefined) {
                             item.name = data.name;
                             item.quantity = data.quantity;
+                            item.blurb = data.blurb;
                             _this.dataService.editItem(item, index);
                         }
                         else {
@@ -528,13 +448,13 @@ var InputDialogueServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 349:
+/***/ 350:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(355);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -542,15 +462,15 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 354:
+/***/ 355:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__(392);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_about_about__ = __webpack_require__(251);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_contact_contact__ = __webpack_require__(252);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(253);
@@ -559,8 +479,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_splash_screen__ = __webpack_require__(249);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_groceries_service_groceries_service__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_input_dialogue_service_input_dialogue_service__ = __webpack_require__(348);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_social_sharing__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_common_http__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_social_sharing__ = __webpack_require__(349);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_common_http__ = __webpack_require__(254);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -625,13 +545,13 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 391:
+/***/ 392:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(245);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(249);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_tabs_tabs__ = __webpack_require__(250);
@@ -671,5 +591,5 @@ var MyApp = /** @class */ (function () {
 
 /***/ })
 
-},[349]);
+},[350]);
 //# sourceMappingURL=main.js.map

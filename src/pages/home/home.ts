@@ -18,33 +18,31 @@ export class HomePage {
   items = []
   errorMessage: string;
 
-
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public dataService: GroceriesServiceProvider, public alertCtrl: AlertController, public socialSharing: SocialSharing, public inputDialogService: InputDialogueServiceProvider) {
     dataService.dataChanged$.subscribe((dataChanged: boolean) => {
       this.loadItems();
     });
   }
 
-  ionViewDidLoad(){
+  ionViewDidLoad() {
     this.loadItems();
   }
 
-  loadItems(){
-    this.dataService.getItems()
-      .subscribe(
+  loadItems() {
+    this.dataService.getItems().subscribe(
         items => this.items = items,
         error => this.errorMessage = <any>error);
       
   }
 
-  removeItem(item, index){
-    console.log("Removing Item: ", item, index);
+  removeItem(item, id){
+    console.log("Removing Item: ", item.name);
     const toast = this.toastCtrl.create({
       message: 'Removing Item - ' + item.name,
       duration: 3000
     });
     toast.present();
-    this.dataService.removeItem(index);
+    this.dataService.removeItem(id);
   }
 
   shareItem(item, index){
@@ -59,7 +57,7 @@ export class HomePage {
 
     this.socialSharing.share(message, subject).then(() => {
       // Sharing via email is possible
-      console.log("Shared successfully!")
+      console.log("Shared successfully!");
     }).catch(() => {
       // Sharing via email is not possible
       console.log("Error while sharing");
@@ -68,7 +66,6 @@ export class HomePage {
   }
 
   editItem(item, index){
-    console.log("Edit Item: ", item, index);
     const toast = this.toastCtrl.create({
       message: 'Editing Item - ' + item.name,
       duration: 3000
@@ -76,7 +73,7 @@ export class HomePage {
     toast.present();
 
     console.log("Editing item: ", item);
-    this.showEditItemPrompt(item, index);
+    this.inputDialogService.showPrompt(item, index);
     
   }
 
@@ -86,100 +83,16 @@ export class HomePage {
 
   }
 
-  
-  showAddItemPrompt() {
-    const prompt = this.alertCtrl.create({
-      title: 'Add Item',
-      message: "Enter the name and quantity of the item you're adding",
-      inputs: [
-        {
-          name: 'name',
-          placeholder: 'Name'
-        },
-        {
-          name: 'quantity',
-          placeholder: 'Quantity'
-        },
-        {
-          name: 'blurb',
-          placeholder: 'Notes etc. (optional)'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancelled add item');
-          }
-        },
-        {
-          text: 'Add',
-          handler: item => {
-            console.log('Add clicked for', item);
-            item.image = 'assets/imgs/customitem.jpg';
-            this.dataService.addItem(item);
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
-
-
-  showEditItemPrompt(item, index) {
-    //save previousImage as the item's image (moved over after inputs take place)
-    var previousImage = item.image
-    const prompt = this.alertCtrl.create({
-      title: 'Edit Item',
-      message: "Enter edit name and quantity of the item",
-      inputs: [
-        {
-          name: 'name',
-          value: item.name
-          
-        },
-        {
-          name: 'quantity',
-          placeholder: 'Quantity',
-          value: item.quantity
-        },
-        {
-          name: 'blurb',
-          placeholder: 'Notes etc. (optional)',
-          value: item.blurb
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancelled add item');
-          }
-        },
-        {
-          text: 'Save',
-          handler: item => {
-            //add a line here so that our image doesn't change when we edit an item 
-            item.image = previousImage;
-            console.log('Save clicked for', item);
-            this.dataService.editItem(item, index);
-            
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
-
-  markDone(item){
+  markDone(item, index){
     console.log('Marked bought for', item.name)
-    item.image= 'assets/imgs/checkbox.jpg'
+    //item.image= 'assets/imgs/checkbox.jpg'
     const toast = this.toastCtrl.create({
       message: 'Marked complete - ' + item.name,
       duration: 3000
     });
     toast.present();
-    
+    item.blurb = "Purchased!"
+    this.dataService.editItem(item, index);
   }
 
   collapse(slidingItem: ItemSliding){

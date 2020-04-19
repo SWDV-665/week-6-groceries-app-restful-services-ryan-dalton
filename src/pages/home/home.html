@@ -5,9 +5,9 @@
 </ion-header>
 
 <ion-content padding>
-  <h4 text-center *ngIf="loadItems().length === 0">
+  <h4 text-center *ngIf="items.length === 0">
     No items available on the list! Click to add some...
-  </h4>
+  </h4> 
 
   <h2>My Grocery / Survival List</h2>
   <ion-list>
@@ -15,7 +15,7 @@
       Items
     </ion-list-header>
   
-    <ion-item-sliding *ngFor="let item of loadItems(); let i = index" #slidingItem>
+    <ion-item-sliding *ngFor="let item of items; let i = index" #slidingItem>
       <ion-item>
         <ion-avatar item-start>
           <img src='../../assets/imgs/customitem.jpg'>
@@ -35,11 +35,11 @@
           Share
         </button>
 
-        <button (click)="removeItem(item, i)" ion-button color="danger" icon-start>
+        <button (click)="removeItem(item, item._id)" ion-button color="danger" icon-start>
           <ion-icon name="trash"></ion-icon>
           Delete
         </button>
-        <button (click)="markDone(item); collapse(slidingItem)" ion-button color="secondary" icon-start>
+        <button (click)="markDone(item, index); collapse(slidingItem)" ion-button color="secondary" icon-start>
           <ion-icon name="checkbox"></ion-icon>
           Done
         </button>

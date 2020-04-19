@@ -61,9 +61,9 @@ export class GroceriesServiceProvider {
     })
   }
 
-  shareItem(index){
-   this.items.splice(index, 1);
-  }
+  //shareItem(index){
+  // this.items.splice(index, 1);
+ // }
 
   addItem(item) {
       this.http.post(this.baseURL + "/api/groceries", item).subscribe(res => {
@@ -73,8 +73,8 @@ export class GroceriesServiceProvider {
     }
   
   editItem(item, index) {
-    console.log("Editing item = ", item);
-    this.http.put(this.baseURL + "api/groceries/" + item._id, item).subscribe( res => {
+    console.log("Edited item = ", index, item);
+    this.http.put(this.baseURL + "/api/groceries/" + item._id, item).subscribe( res => {
       this.items = res;
       this.dataChangeSubject.next(true);
     });

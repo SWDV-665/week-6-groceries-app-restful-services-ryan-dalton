@@ -20,7 +20,7 @@ export class InputDialogueServiceProvider {
   showPrompt(item?, index?) {
     const prompt = this.alertCtrl.create({
       title: item ? 'Edit Item' : 'Add Item',
-      message: item ? "Please edit item..." : "Please enter item...",
+      message: item ? "Please edit item..." : "Please enter a new item...",
       inputs: [
         {
           name: 'name',
@@ -35,7 +35,7 @@ export class InputDialogueServiceProvider {
         {
           name: 'blurb',
           placeholder: 'Add description here',
-          value: item ? item.name: null
+          value: item ? item.blurb: null
         },
       ],
       buttons: [
@@ -52,6 +52,7 @@ export class InputDialogueServiceProvider {
             if (index !== undefined) {
               item.name = data.name;
               item.quantity = data.quantity;
+              item.blurb = data.blurb;
               this.dataService.editItem(item, index);
             }
             else {
